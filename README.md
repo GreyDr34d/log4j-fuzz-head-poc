@@ -47,3 +47,4 @@ ${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://xxxxxxx.xx/p
 * Contact
 * X-Wap-Profile
 * X-Api-Version
+* If-Modified-Since(structs2)
